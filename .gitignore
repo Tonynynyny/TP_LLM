@@ -1,0 +1,49 @@
+# ============================================
+# Secrets : ne JAMAIS les commiter
+# ============================================
+credentials.json
+client_secret*.json
+token.json
+.env
+.env.*
+!.env.example
+
+# ============================================
+# Environnements virtuels Python
+# ============================================
+venv/
+.venv/
+env/
+ENV/
+
+# ============================================
+# Fichiers générés par Python
+# ============================================
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+
+# ============================================
+# Etat local du projet (propre a chaque machine)
+# ============================================
+processed_ids.json
+*.log
+
+# ============================================
+# Editeurs / IDE
+# ============================================
+.vscode/
+.idea/
+*.swp
+*~
+
+# ============================================
+# Fichiers systeme (Windows / macOS / Linux)
+# ============================================
+.DS_Store
+Thumbs.db
+desktop.ini
