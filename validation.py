@@ -1,5 +1,6 @@
 from email.utils import getaddresses
 from models import IncomingEmail
+from models import ReplyProposal
 
 # Liste d'adresses de test autorisées pour le TP (à adapter selon vos adresses de test)
 APPROVED_RECIPIENTS = [
@@ -33,3 +34,34 @@ def validate_recipient(incoming: IncomingEmail, allowed_addresses: list[str] = A
         raise ValueError(f"Adresse non autorisée (hors liste blanche) : {address}")
 
     return address
+
+
+def validate_proposal(data: dict) -> ReplyProposal:
+    """Valide la proposition JSON issue du LLM selon les règles du TP."""
+    if not isinstance(data, dict):
+        raise ValueError("La proposition n'est pas un objet JSON valide.")
+    
+    # Vérification des clés exactes
+    if set(data.keys()) != {"needs_reply", "reason", "draft"}:
+        raise ValueError("Champs inattendus ou manquants dans le JSON.")
+    
+    needs_reply = data["needs_reply"]
+    if not isinstance(needs_reply, bool):
+        raise ValueError("Le champ needs_reply doit être un vrai booléen.")
+    
+    reason = data["reason"]
+    if not isinstance(reason, str) or len(reason) > 300:
+        raise ValueError("reason doit être une chaîne de 300 caractères maximum.")
+    
+    draft = data["draft"]
+    if not isinstance(draft, str):
+        raise ValueError("draft doit être une chaîne.")
+    
+    if needs_reply:
+        if not (1 <= len(draft) <= 1500):
+            raise ValueError("Si needs_reply est true, draft doit faire entre 1 et 1500 caractères.")
+    else:
+        if draft != "":
+            raise ValueError("Si needs_reply est false, draft doit être une chaîne vide.")
+            
+    return ReplyProposal(needs_reply=needs_reply, reason=reason, draft=draft)

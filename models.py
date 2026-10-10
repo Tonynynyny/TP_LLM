@@ -11,3 +11,9 @@ class IncomingEmail:
     reply_to_header: str | None
     subject: str | None
     body: str | None
+
+@dataclass
+class ReplyProposal:
+    needs_reply: bool
+    reason: str
+    draft: str  
